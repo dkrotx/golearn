@@ -15,6 +15,7 @@ func TestParseString(t *testing.T) {
         { input: "2+3", expect: []string{"2", "+", "3"} },
         { input: "-1+2", expect: []string{"-1", "+", "2"}, msg: "unary minus doesn't work" },
         { input: "1-(2+3)", expect: []string{"1", "-", "(", "2", "+", "3", ")"} },
+        { input: "1-(2+2)/2", expect: []string{"1", "-", "(", "2", "+", "2", ")", "/", "2"} },
         { input: "1-(2+3*(-4/5))", expect: []string{"1", "-", "(", "2", "+", "3", "*", "(", "-4", "/", "5", ")", ")"} },
     }
 

@@ -30,7 +30,7 @@ func ParseString(s string) ([]string, error) {
 
     for i, tok := range tokens {
         if isOperator(tok) {
-            if i == 0 || !isNumber(tokens[i-1]) {
+            if i == 0 || (!isNumber(tokens[i-1]) && tokens[i-1] != ")") {
                 if tok != "-" {
                     return nil, errors.New("Only '-' allowed as unary sing")
                 }

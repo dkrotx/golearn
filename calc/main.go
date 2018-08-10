@@ -19,7 +19,7 @@ func main() {
 
     tokens, err := ParseString(raw_expr)
     if err != nil {
-        panic(fmt.Sprintf(`failed to parse "%v"`, raw_expr))
+        panic(fmt.Sprintf(`failed to parse "%v": %s`, raw_expr, err))
     }
 
     if *verbose {
