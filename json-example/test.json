@@ -1,0 +1,17 @@
+{
+    "steps" : [
+        {
+            "name": "credit",
+            "success": true,
+            "amount": 300
+        },
+        {
+            "name": "debt",
+            "success": false,
+            "amount": 400
+        }
+    ],
+    "start_time": "2018-08-23T13:05:21.852573",
+    "end_time": "2018-08-23T13:15:21.852573",
+    "inform": ["jdkrot@gmail.com", "dkrot.uber.com"]
+}
