@@ -11,10 +11,13 @@ import (
 func main() {
 	text, err := ioutil.ReadFile(os.Args[1])
 	if err != nil {
-		panic(fmt.Sprintf("Failed to parse input json: %s", err))
+		panic(fmt.Sprintf("Failed to read input file: %v", err))
 	}
 
-	day := LoadDayEvent(text)
+	day, err := LoadDayEvent(text)
+	if err != nil {
+		panic(fmt.Sprintf("Failed to parse input json: %v", err))
+	}
 	fmt.Printf("day structure:\n%v\n\n", day)
 
 	// use obtained values
@@ -22,7 +25,7 @@ func main() {
 
 	js, err := json.Marshal(day)
 	if err != nil {
-		panic(fmt.Sprintf("Failed to make output json: %s", err))
+		panic(fmt.Sprintf("Failed to make output json: %v", err))
 	}
 
 	fmt.Printf("Marshalled:\n%s\n\n", js)
