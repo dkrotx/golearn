@@ -45,14 +45,13 @@ func dirTreeImpl(out io.Writer, path string, printFiles bool, prefix string) (er
 	}
 	filtered := filterDirs(files, printFiles)
 
-
 	for i, file := range filtered {
-		isLast := i == len(filtered) - 1
+		isLast := i == len(filtered)-1
 
 		fmt.Fprint(out, prefix)
 		if isLast {
 			fmt.Fprint(out, "└───")
-		}  else {
+		} else {
 			fmt.Fprint(out, "├───")
 		}
 		printEntryWithSize(out, file)
