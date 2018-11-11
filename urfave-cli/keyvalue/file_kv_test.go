@@ -13,7 +13,12 @@ func mkTempFile(t *testing.T) string {
 
 	fd, err := ioutil.TempFile("", "file_kv_test_*.txt")
 	require.NoError(t, err)
-	return fd.Name()
+
+	path := fd.Name()
+
+	require.NoError(t, fd.Close())
+	require.NoError(t, os.Remove(path)) // we should start w/o file
+	return path
 }
 
 func TestSetAndGetWorks(t *testing.T) {
@@ -71,3 +76,4 @@ func TestDelete(t *testing.T) {
 	require.Error(t, err)
 	assert.IsType(t, KeyNotFoundErr, err)
 }
+

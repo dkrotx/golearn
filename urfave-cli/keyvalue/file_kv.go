@@ -75,25 +75,26 @@ func (fkv *fileKeyValue) load() (*kvData, error) {
 }
 
 func (fkv *fileKeyValue) save(data *kvData) error {
-	raw, err := json.Marshal(data)
+	raw, err := json.MarshalIndent(data, "", "    ")
 	if err != nil {
 		return err
 	}
+	raw = append(raw, '\n') // make it pretty as human-entered JSON
 
 	ioutil.WriteFile(fkv.path, raw, 0666)
 	return nil
 }
 
 func (fkv *fileKeyValue) init() error {
-	info, err := os.Stat(fkv.path)
+	_, err := os.Stat(fkv.path)
 
-	if err != nil && !os.IsNotExist(err) {
+	if err != nil {
+		if os.IsNotExist(err) {
+			return fkv.save(&kvData{})
+		}
 		return err
 	}
 
-	if info.Size() == 0 {
-		return fkv.save(&kvData{})
-	}
 	return nil
 }
 
