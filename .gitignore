@@ -1,8 +1,12 @@
-# ignore all files w/o extension
-*
-!*/
-!*.*
-!Makefile
+## ignore all files w/o extension
+# commented since it prevents to add directories
+#*
+#!*/
+#!*.*
+#!Makefile
+
+coursera/hw1_tree/main
+json-example/json-example
 
 *.swp
 .idea
