@@ -57,6 +57,8 @@ func GetKeyValue(ctx *cli.Context) error {
 		return cli.NewExitError("usage: key", _usageExitCode)
 	}
 
+	quiet := ctx.Bool("quiet")
+
 	kv, err := NewFileKeyValue(ctx.GlobalString("file"))
 	if err != nil {
 		return cli.NewExitError(err, 1)
@@ -64,10 +66,16 @@ func GetKeyValue(ctx *cli.Context) error {
 
 	value, err := kv.Get(ctx.Args()[0])
 	if err != nil && err == KeyNotFoundErr {
+		if quiet {
+			return cli.NewExitError("", _keyNotFoundExitCode)
+		}
 		return cli.NewExitError("key not found", _keyNotFoundExitCode)
 	}
 
-	fmt.Println(value)
+	if  !quiet {
+		fmt.Println(value)
+	}
+
 	return nil
 }
 
@@ -91,10 +99,6 @@ func main() {
 	app := cli.NewApp()
 
 	app.Flags = []cli.Flag{
-		cli.BoolFlag{
-			Name:  "quiet, q",
-			Usage: "don't show any output",
-		},
 		cli.StringFlag{
 			Name:  "file, f",
 			Value: "/tmp/golearn_kv.txt",
@@ -120,6 +124,12 @@ func main() {
 			Name: "get",
 			Usage: "show filue by given key",
 			Action: GetKeyValue,
+			Flags: []cli.Flag {
+				cli.BoolFlag{
+					Name:  "quiet, q",
+					Usage: "don't show any output. Only provide exit-code. (useful for scripts)",
+				},
+			},
 		},
 		{
 			Name: "delete",
