@@ -9,8 +9,7 @@ var KeyNotFoundErr = errors.New("key not found")
 var KeyExists = errors.New("key already exists")
 
 type SetOptions struct {
-	TTL time.Time
-	OnlyIfNotExists bool
+	TTL time.Duration
 }
 
 // use functional-params idiom
@@ -19,20 +18,15 @@ type Option func(opts *SetOptions)
 
 func TTL(ttl time.Duration) Option {
 	return func(opts *SetOptions) {
-		opts.TTL = time.Now().Add(ttl)
+		opts.TTL = ttl
 	}
 }
 
-func IfNotExists() Option {
-	return func(opts *SetOptions) {
-		opts.OnlyIfNotExists = true
-	}
-}
-
-func ApplyOptions(origin *SetOptions, opts...Option) {
+func CombineOptions(opts...Option) (res SetOptions) {
 	for _, opt := range opts {
-		opt(origin)
+		opt(&res)
 	}
+	return
 }
 
 type KeyValue interface {

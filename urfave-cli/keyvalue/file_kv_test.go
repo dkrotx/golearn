@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 	"testing"
+	"time"
 )
 
 func mkTempFile(t *testing.T) string {
@@ -33,6 +34,25 @@ func TestSetAndGetWorks(t *testing.T) {
 	value, err := kv.Get("name")
 	assert.NoError(t, err)
 	assert.Equal(t, "Jan", value)
+}
+
+func TestTTLWorks(t *testing.T) {
+	tempFile := mkTempFile(t)
+	defer os.Remove(tempFile)
+
+	kv, err := NewFileKeyValue(tempFile)
+	require.NoError(t, err)
+
+	require.NoError(t, kv.Set("name", "Jan", TTL(time.Second / 2)))
+
+	value, err := kv.Get("name")
+	require.NoError(t, err, "key should not expire yet")
+	assert.Equal(t, "Jan", value)
+
+	time.Sleep(600 * time.Millisecond)
+	_, err = kv.Get("name")
+	require.Error(t, err, "key must be expired!")
+	assert.IsType(t, KeyNotFoundErr, err)
 }
 
 func TestGetReturnsErrorWhenKeyNotFound(t *testing.T) {
