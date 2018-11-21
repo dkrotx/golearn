@@ -8,6 +8,9 @@
 coursera/hw1_tree/main
 json-example/json-example
 urfave-cli/keyvalue/keyvalue
+metrics/metrics
+
+*/vendor
 
 *.swp
 .idea
