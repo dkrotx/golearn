@@ -16,3 +16,15 @@ func StackTrace(e error) errors.StackTrace {
 	}
 	return err.StackTrace()
 }
+
+func ErrorWithEarliestStackTrace(e error) error {
+	if e == nil {
+		return nil
+	}
+
+	cause := errors.Cause(e)
+	if StackTrace(cause) != nil {
+		return cause
+	}
+	return e
+}

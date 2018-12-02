@@ -12,6 +12,11 @@ func requestBackend(url string) error {
 	//
 	// Try to switch between 503 and 404 HTTP codes
 	return NewHTTPError(errors.New("failed to connect to backend"), http.StatusBadGateway)
+
+	// also try this variant. Here you'll get usual error w/o stack-trace
+	// but we will still get ANY stack trace starting with first .Wrap function
+	// see ErrorWithEarliestStackTrace() for details
+	return fmt.Errorf("bad request")
 }
 
 func middleendCallSomething(domain string) error {

@@ -21,8 +21,8 @@ func IsTemporaryCause(err error) bool {
 
 // SPrintStackTrace prints stack trace with desired depth (-1 for unlimited)
 func SPrintStackTrace(err error, depth int) string {
-	e, ok := errors.Cause(err).(stackTracer)
-	if !ok {
+	st := StackTrace(ErrorWithEarliestStackTrace(err))
+	if st == nil {
 		return "[NO STACK AVAILABLE]"
 	}
 
@@ -30,7 +30,6 @@ func SPrintStackTrace(err error, depth int) string {
 		depth = math.MaxInt32
 	}
 
-	st := e.StackTrace()
 	if len(st) < depth {
 		depth = len(st)
 	}
