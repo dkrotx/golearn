@@ -19,6 +19,7 @@ import (
 type Context struct {
 	logger *zap.SugaredLogger
 	scope  tally.Scope
+	histogram tally.Histogram
 }
 
 func randomDuration(fromMs, toMs int) time.Duration {
@@ -30,7 +31,9 @@ func (ctx *Context) handler(w http.ResponseWriter, r *http.Request) {
 	ctx.scope.Counter("req_cnt").Inc(1)
 	ctx.logger.Infof("New Request: %s", r.URL.Path)
 
-	ctx.scope.Timer("handler_time").Record(randomDuration(50, 100))
+	duration := randomDuration(20, 100)
+	ctx.scope.Timer("handler_time").Record(duration)
+	ctx.histogram.RecordDuration(duration)
 	fmt.Fprintf(w, "Hi there, I love %s!\n", r.URL.Path[1:])
 }
 
@@ -102,9 +105,16 @@ func main() {
 	backgroundCtx, cancelFn := context.WithCancel(context.Background())
 	defer cancelFn()
 
-	ctx := &Context{logger: logger.Sugar(), scope: scope}
+	ctx := &Context{
+		logger: logger.Sugar(),
+		scope: scope,
+		histogram: scope.Histogram("handler_hist",
+			tally.DurationBuckets{time.Millisecond * 30, time.Millisecond * 60, time.Millisecond * 90, time.Millisecond * 200},
+		),
+	}
 
 	go ctx.sysinfoReportLoop(backgroundCtx)
+
 
 	http.HandleFunc("/", ctx.handler)
 	http.HandleFunc("/error", ctx.errorsHandler)
