@@ -7,6 +7,7 @@ import (
 	"github.com/shirou/gopsutil/load"
 	"github.com/uber-go/tally"
 	tallystatsd "github.com/uber-go/tally/statsd"
+    _ "net/http/pprof"
 	"go.uber.org/zap"
 	"log"
 	"math/rand"
