@@ -18,6 +18,9 @@ func handleClient(client *tutorial.CalculatorClient) (err error) {
 	sum, _ := client.Add(defaultCtx, 1, 1)
 	fmt.Print("1+1=", sum, "\n")
 
+	concat, _ := client.Concat(defaultCtx, "abra", "cadabra")
+	fmt.Print("abra & cadabra=”", concat, "\n")
+
 	work := tutorial.NewWork()
 	work.Op = tutorial.Operation_DIVIDE
 	work.Num1 = 1

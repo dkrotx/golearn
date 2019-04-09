@@ -23,6 +23,10 @@ func (p *CalculatorHandler) Add(ctx context.Context, num1 int32, num2 int32) (re
 	return num1 + num2, nil
 }
 
+func (p *CalculatorHandler) Concat(ctx context.Context, a, b string) (string, error) {
+	return fmt.Sprintf("%s_%s", a, b), nil
+}
+
 func (p *CalculatorHandler) Calculate(ctx context.Context, logid int32, w *tutorial.Work) (val int32, err error) {
 	fmt.Print("calculate(", logid, ", {", w.Op, ",", w.Num1, ",", w.Num2, "})\n")
 	switch w.Op {

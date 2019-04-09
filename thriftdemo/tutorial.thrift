@@ -46,6 +46,8 @@ service Calculator {
 
    i32 add(1:i32 num1, 2:i32 num2),
 
+   string concat(1:string a, 2:string b),
+
    i32 calculate(1:i32 logid, 2:Work w) throws (1:InvalidOperation ouch),
 
    /**
